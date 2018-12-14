@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid :class="{'pa-5':isMobile}">
     <v-layout align-center justify-center row>
       <v-dialog v-model="dialog" width="80%" :fullscreen="isMobile">
         <v-btn slot="activator" color="success" dark>Inserire Dati pagamento</v-btn>
@@ -123,10 +123,10 @@ export default {
   components: {
     CalendarMenu
   },
+  props: {
+    isMobile: Boolean
+  },
   data: () => ({
-    props: {
-      isMobile: Boolean
-    },
     e6: 1,
     valid: false,
     modal: false,

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid :class="{'pa-5':isMobile}">
     <v-form v-model="valid">
       <v-layout row wrap>
         <v-flex xs12 sm6 md6>
@@ -46,10 +46,10 @@
             label="Sezionale"
           ></v-combobox>
           <v-layout row wrap>
-            <v-flex xs12 sm6 md4>
+            <v-flex xs12 sm4 md4>
               <v-text-field v-model="progresivo" label="Progressivo" disabled></v-text-field>
             </v-flex>
-            <v-flex xs12 sm6 md6>
+            <v-flex xs12 sm8 md6>
               <v-btn @click="dialog = false">Modifica Progressivo</v-btn>
             </v-flex>
           </v-layout>

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid id="test">
+  <v-container fluid :class="{'pa-0':isMobile}">
     <v-layout row wrap>
       <v-toolbar dark>
         <v-toolbar-title>Creazione fattura</v-toolbar-title>
@@ -9,10 +9,10 @@
         </v-btn>-->
       </v-toolbar>
 
-      <v-card class="main-card" width="100%">
-        <v-container fluid grid-list-lg>
+      <v-card width="100%">
+        <v-container :class="{'pa-0':isMobile}" class="grey lighten-3" fluid grid-list-lg>
           <v-layout v-if="isMobile" row wrap>
-            <v-expansion-panel value="0" popout>
+            <v-expansion-panel class="mt-2" :value="0" popout>
               <v-expansion-panel-content>
                 <div slot="header">Dati Documento</div>
                 <DatiDocumento></DatiDocumento>
@@ -35,7 +35,7 @@
 
               <v-expansion-panel-content>
                 <div slot="header">Calcolo Fattura</div>
-                <CalcoloFattura></CalcoloFattura>
+                <CalcoloFattura :isMobile="isMobile"></CalcoloFattura>
               </v-expansion-panel-content>
             </v-expansion-panel>
 
@@ -64,9 +64,7 @@
             <v-flex xs12 sm6 md6>
               <v-card width="100%" height="100%">
                 <v-card-title primary-title>
-                  <div>
-                    <div class="headline">Dati Cliente</div>
-                  </div>
+                  <div class="headline">Dati Cliente</div>
                 </v-card-title>
                 <v-card-text>
                   <DatiCliente :isMobile="isMobile"></DatiCliente>
@@ -108,7 +106,7 @@
                   </div>
                 </v-card-title>
                 <v-card-text>
-                  <CalcoloFattura></CalcoloFattura>
+                  <CalcoloFattura :isMobile="isMobile"></CalcoloFattura>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -185,23 +183,15 @@ export default {
   border-radius: 0;
   background-color: #eee;
 }
-.container.grid-list-lg,
-#test {
-  padding: 0px;
-}
-
-.v-expansion-panel {
-  margin-top: 1em;
-}
 
 @media only screen and (min-width: 768px) {
   .headline {
     font-size: 24px !important;
   }
 
-  .container {
+  /* .container {
     padding: 16px;
-  }
+  } */
 
   .v-expansion-panel {
     margin-top: 0;

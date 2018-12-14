@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid :class="{'pa-5':isMobile}">
     <v-layout align-center justify-center row>
       <v-dialog v-model="dialog" width="80%" :fullscreen="isMobile">
         <v-btn slot="activator" color="success" dark>Aggiungi Prodotto o Servicio</v-btn>
@@ -127,6 +127,9 @@
 
 <script>
 export default {
+  props: {
+    isMobile: Boolean
+  },
   data: () => ({
     search: "",
     selected: [],

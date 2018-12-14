@@ -1,8 +1,28 @@
 <template>
-  <v-container fluid>
+  <v-container fluid :class="{'pa-5':isMobile}" fill-height>
     <v-layout align-center justify-center row>
+      <v-card v-if="clientSelected" width="100%">
+        <v-card-title primary-title>
+          <h3 class="headline mb-0">{{ clientSelected.cliente}}</h3>
+        </v-card-title>
+        <v-card-text>
+          <p>Codice: {{ clientSelected.codiceUnivocoUfficio }}</p>
+          <p>C.F: {{ clientSelected.codiceFiscale }}</p>
+          <p>{{ clientSelected.indirizzoSede }}</p>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn @click="dialog = true" flat color="info">Modifica</v-btn>
+        </v-card-actions>
+      </v-card>
+
       <v-dialog v-model="dialog" width="80%" :fullscreen="isMobile">
-        <v-btn slot="activator" color="success" dark>Inserire un Cliente</v-btn>
+        <v-btn
+          v-show="clientSelected === null"
+          slot="activator"
+          color="success"
+          dark
+        >Inserire un Cliente</v-btn>
 
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>Inserimento PA Cliente
@@ -62,25 +82,16 @@
                   </v-card>
                 </v-dialog>
               </v-card-title>
-              <v-data-table
-                :headers="headers"
-                :items="clients"
-                v-model="selected"
-                item-key="cliente"
-                select-all
-                :search="search"
-              >
+              <v-data-table :headers="headers" :items="clients" v-model="selected" :search="search">
                 <template slot="items" slot-scope="props">
-                  <td>
-                    <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
-                  </td>
                   <td class="text-xs-left">{{ props.item.cliente }}</td>
                   <td class="text-xs-left">{{ props.item.codiceUnivocoUfficio }}</td>
                   <td class="text-xs-left">{{ props.item.codiceFiscale }}</td>
                   <td class="text-xs-left">{{ props.item.indirizzoSede }}</td>
                   <td class="justify-center layout px-0">
-                    <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-                    <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+                    <!-- <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+                    <v-icon small @click="deleteItem(props.item)">delete</v-icon>-->
+                    <v-btn @click="clientSelect(props.item)" color="success">Seleziona</v-btn>
                   </td>
                 </template>
                 <v-alert
@@ -104,6 +115,7 @@ export default {
     isMobile: Boolean
   },
   data: () => ({
+    clientSelected: null,
     search: "",
     selected: [],
     dialog: false,
@@ -173,6 +185,11 @@ export default {
           indirizzoSede: "Piazza Aldo Moro"
         }
       ];
+    },
+
+    clientSelect(value) {
+      this.clientSelected = value;
+      this.dialog = false;
     },
 
     editItem(item) {
