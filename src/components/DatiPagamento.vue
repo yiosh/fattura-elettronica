@@ -1,54 +1,43 @@
 <template>
-  <v-flex xs12 sm6 md6>
-    <v-card width="100%" height="100%">
-      <v-card-title primary-title>
-        <div>
-          <div class="headline">Dati Pagamento</div>
-        </div>
-      </v-card-title>
-      <v-card-text>
-        <v-container fluid>
-          <v-layout align-center justify-center row>
-            <v-dialog v-model="dialog" width="80%">
-              <v-btn slot="activator" color="success" dark>Inserire Dati pagamento</v-btn>
+  <v-container fluid>
+    <v-layout align-center justify-center row>
+      <v-dialog v-model="dialog" width="80%" :fullscreen="isMobile">
+        <v-btn slot="activator" color="success" dark>Inserire Dati pagamento</v-btn>
 
-              <v-card>
-                <v-card-title
-                  class="headline grey lighten-2"
-                  primary-title
-                >Inserimento Dati Pagamento
-                  <v-spacer></v-spacer>
-                  <v-btn @click="dialog = false" icon>
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                </v-card-title>
+        <v-card>
+          <v-card-title class="headline grey lighten-2" primary-title>Inserimento Dati Pagamento
+            <v-spacer></v-spacer>
+            <v-btn @click="dialog = false" icon>
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-card-title>
 
-                <v-stepper v-model="e6" vertical>
-                  <v-stepper-step editable :complete="e6 > 1" step="1">Pagamento
-                    <!-- <small>Summarize if needed</small> -->
-                  </v-stepper-step>
+          <v-stepper v-model="e6" vertical>
+            <v-stepper-step editable :complete="e6 > 1" step="1">Pagamento
+              <!-- <small>Summarize if needed</small> -->
+            </v-stepper-step>
 
-                  <v-stepper-content step="1">
-                    <v-card flat>
-                      <v-container grid-list-xl>
-                        <v-layout row wrap>
-                          <v-flex xs12 md4>
-                            <v-form v-model="valid">
-                              <v-text-field
-                                v-model="ripartizioneRate[0].beneficiario"
-                                :counter="200"
-                                label="Beneficiario"
-                              ></v-text-field>
-                              <v-select
-                                v-model="ripartizioneRate[0].condizioniDiPagamento"
-                                required
-                                :items="['Pagamento a rate', 'Pagamento completo', 'Anticipo']"
-                                label="Condizioni di Pagamento"
-                              ></v-select>
-                              <v-select
-                                v-model="ripartizioneRate[0].metodoDiPagamento"
-                                required
-                                :items="[
+            <v-stepper-content step="1">
+              <v-card flat>
+                <v-container grid-list-xl>
+                  <v-layout row wrap>
+                    <v-flex xs12 md4>
+                      <v-form v-model="valid">
+                        <v-text-field
+                          v-model="ripartizioneRate[0].beneficiario"
+                          :counter="200"
+                          label="Beneficiario"
+                        ></v-text-field>
+                        <v-select
+                          v-model="ripartizioneRate[0].condizioniDiPagamento"
+                          required
+                          :items="['Pagamento a rate', 'Pagamento completo', 'Anticipo']"
+                          label="Condizioni di Pagamento"
+                        ></v-select>
+                        <v-select
+                          v-model="ripartizioneRate[0].metodoDiPagamento"
+                          required
+                          :items="[
                                   'Assegno',
                                   'Assegno circolare',
                                   'Bonifico',
@@ -69,66 +58,63 @@
                                   'RIBA 60 GG DF',
                                   'RIBA 60 GG FM DF'
                                 ]"
-                                label="Metodo di Pagamento"
-                              ></v-select>
-                            </v-form>
-                          </v-flex>
-                          <v-flex
-                            v-if="ripartizioneRate[0].beneficiario !== '' && ripartizioneRate[0].condizioniDiPagamento !== '' && ripartizioneRate[0].metodoDiPagamento !== ''"
-                            xs12
-                            md8
-                          >
-                            <v-data-table
-                              :headers="headers"
-                              :items="ripartizioneRate"
-                              class="elevation-1"
-                            >
-                              <template slot="items" slot-scope="props">
-                                <td class="text-xs-right">{{ props.item.numeroRata }}</td>
-                                <td class="text-xs-right">
-                                  <CalendarMenu :date="props.item.dataScadenza"></CalendarMenu>
-                                </td>
-                                <td class="text-xs-right">
-                                  <v-text-field
-                                    type="number"
-                                    step="0.01"
-                                    v-model="props.item.importo"
-                                    prefix="€"
-                                  ></v-text-field>
-                                </td>
-                              </template>
+                          label="Metodo di Pagamento"
+                        ></v-select>
+                      </v-form>
+                    </v-flex>
+                    <v-flex
+                      v-if="ripartizioneRate[0].beneficiario !== '' && ripartizioneRate[0].condizioniDiPagamento !== '' && ripartizioneRate[0].metodoDiPagamento !== ''"
+                      xs12
+                      md8
+                    >
+                      <v-data-table
+                        :headers="headers"
+                        :items="ripartizioneRate"
+                        class="elevation-1"
+                      >
+                        <template slot="items" slot-scope="props">
+                          <td class="text-xs-right">{{ props.item.numeroRata }}</td>
+                          <td class="text-xs-right">
+                            <CalendarMenu :date="props.item.dataScadenza"></CalendarMenu>
+                          </td>
+                          <td class="text-xs-right">
+                            <v-text-field
+                              type="number"
+                              step="0.01"
+                              v-model="props.item.importo"
+                              prefix="€"
+                            ></v-text-field>
+                          </td>
+                        </template>
 
-                              <template slot="footer">
-                                <td :colspan="headers.length">
-                                  <v-layout align-center justify-end row>
-                                    <strong>Totale: {{ (ripartizioneRate[0].importo).toFixed(2) }}€</strong>
-                                  </v-layout>
-                                </td>
-                              </template>
-                            </v-data-table>
-                          </v-flex>
-                        </v-layout>
-                      </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="e6 = 2">Prosegui</v-btn>
-                    <v-btn flat>Anulla</v-btn>
-                  </v-stepper-content>
-
-                  <v-stepper-step editable :complete="e6 > 2" step="2">Altri Dati</v-stepper-step>
-
-                  <v-stepper-content step="2">
-                    <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
-                    <v-btn color="primary" @click="e6 = 3">Prosegui</v-btn>
-                    <v-btn flat>Anulla</v-btn>
-                  </v-stepper-content>
-                </v-stepper>
+                        <template slot="footer">
+                          <td :colspan="headers.length">
+                            <v-layout align-center justify-end row>
+                              <strong>Totale: {{ (ripartizioneRate[0].importo).toFixed(2) }}€</strong>
+                            </v-layout>
+                          </td>
+                        </template>
+                      </v-data-table>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
               </v-card>
-            </v-dialog>
-          </v-layout>
-        </v-container>
-      </v-card-text>
-    </v-card>
-  </v-flex>
+              <v-btn color="primary" @click="e6 = 2">Prosegui</v-btn>
+              <v-btn flat>Anulla</v-btn>
+            </v-stepper-content>
+
+            <v-stepper-step editable :complete="e6 > 2" step="2">Altri Dati</v-stepper-step>
+
+            <v-stepper-content step="2">
+              <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+              <v-btn color="primary" @click="e6 = 3">Prosegui</v-btn>
+              <v-btn flat>Anulla</v-btn>
+            </v-stepper-content>
+          </v-stepper>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -138,6 +124,9 @@ export default {
     CalendarMenu
   },
   data: () => ({
+    props: {
+      isMobile: Boolean
+    },
     e6: 1,
     valid: false,
     modal: false,

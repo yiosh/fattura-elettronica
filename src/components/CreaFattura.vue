@@ -1,31 +1,126 @@
 <template>
-  <v-container fluid>
+  <v-container fluid id="test">
     <v-layout row wrap>
       <v-toolbar dark>
         <v-toolbar-title>Creazione fattura</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon>
+        <!-- <v-btn icon>
           <v-icon>close</v-icon>
-        </v-btn>
+        </v-btn>-->
       </v-toolbar>
 
       <v-card class="main-card" width="100%">
         <v-container fluid grid-list-lg>
-          <v-layout row wrap>
-            <DatiDocumento></DatiDocumento>
-            <DatiCliente></DatiCliente>
-            <ProdottiServizi></ProdottiServizi>
-            <DatiPagamento></DatiPagamento>
-            <CalcoloFattura></CalcoloFattura>
+          <v-layout v-if="isMobile" row wrap>
+            <v-expansion-panel value="0" popout>
+              <v-expansion-panel-content>
+                <div slot="header">Dati Documento</div>
+                <DatiDocumento></DatiDocumento>
+              </v-expansion-panel-content>
+
+              <v-expansion-panel-content>
+                <div slot="header">Dati Cliente</div>
+                <DatiCliente :isMobile="isMobile"></DatiCliente>
+              </v-expansion-panel-content>
+
+              <v-expansion-panel-content>
+                <div slot="header">Prodotti Servizi</div>
+                <ProdottiServizi :isMobile="isMobile"></ProdottiServizi>
+              </v-expansion-panel-content>
+
+              <v-expansion-panel-content>
+                <div slot="header">Dati Pagamento</div>
+                <DatiPagamento :isMobile="isMobile"></DatiPagamento>
+              </v-expansion-panel-content>
+
+              <v-expansion-panel-content>
+                <div slot="header">Calcolo Fattura</div>
+                <CalcoloFattura></CalcoloFattura>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+
+            <v-flex v-if="isMobile">
+              <v-btn block>Anulla</v-btn>
+              <v-btn block dark>Anteprima</v-btn>
+              <v-btn block dark>Stampa</v-btn>
+              <v-btn block dark>Salva Bozza</v-btn>
+              <v-btn block color="success">Invia</v-btn>
+            </v-flex>
           </v-layout>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn>Anulla</v-btn>
-            <v-btn dark>Anteprima</v-btn>
-            <v-btn dark>Stampa</v-btn>
-            <v-btn dark>Salva Bozza</v-btn>
-            <v-btn color="success">Invia</v-btn>
-          </v-card-actions>
+
+          <v-layout v-if="isMobile === false" row wrap>
+            <v-flex xs12 sm6 md6>
+              <v-card width="100%" height="100%">
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">Dati Documento</div>
+                  </div>
+                </v-card-title>
+                <v-card-text>
+                  <DatiDocumento></DatiDocumento>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex xs12 sm6 md6>
+              <v-card width="100%" height="100%">
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">Dati Cliente</div>
+                  </div>
+                </v-card-title>
+                <v-card-text>
+                  <DatiCliente :isMobile="isMobile"></DatiCliente>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+
+            <v-flex xs12 sm12 md12>
+              <v-card width="100%" height="100%">
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">Prodotti Servizi</div>
+                  </div>
+                </v-card-title>
+                <v-card-text>
+                  <ProdottiServizi :isMobile="isMobile"></ProdottiServizi>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+
+            <v-flex xs12 sm6 md6>
+              <v-card width="100%" height="100%">
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">Dati Pagamento</div>
+                  </div>
+                </v-card-title>
+                <v-card-text>
+                  <DatiPagamento :isMobile="isMobile"></DatiPagamento>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+
+            <v-flex xs12 sm6 md6>
+              <v-card width="100%" height="100%">
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">Calcolo Fattura</div>
+                  </div>
+                </v-card-title>
+                <v-card-text>
+                  <CalcoloFattura></CalcoloFattura>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+
+            <v-card-actions v-if="isMobile === false">
+              <v-btn>Anulla</v-btn>
+              <v-btn dark>Anteprima</v-btn>
+              <v-btn dark>Stampa</v-btn>
+              <v-btn dark>Salva Bozza</v-btn>
+              <v-btn color="success">Invia</v-btn>
+            </v-card-actions>
+          </v-layout>
         </v-container>
       </v-card>
     </v-layout>
@@ -40,6 +135,9 @@ import DatiPagamento from "./DatiPagamento";
 import CalcoloFattura from "./CalcoloFattura";
 export default {
   name: "CreaFattura",
+  props: {
+    isMobile: Boolean
+  },
   components: {
     DatiDocumento,
     DatiCliente,
@@ -86,5 +184,27 @@ export default {
 .main-card {
   border-radius: 0;
   background-color: #eee;
+}
+.container.grid-list-lg,
+#test {
+  padding: 0px;
+}
+
+.v-expansion-panel {
+  margin-top: 1em;
+}
+
+@media only screen and (min-width: 768px) {
+  .headline {
+    font-size: 24px !important;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  .v-expansion-panel {
+    margin-top: 0;
+  }
 }
 </style>
