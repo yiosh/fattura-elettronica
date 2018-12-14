@@ -40,11 +40,11 @@
           </v-menu>
         </v-flex>
         <v-flex xs12 sm6 md6>
-          <v-combobox
-            v-model="tipoCliente[0]"
+          <v-select
             :items="tipoCliente.selected == 'PA' ? ['FATTPA'] : ['FPR']"
-            label="Sezionale"
-          ></v-combobox>
+            :value="tipoCliente.selected == 'PA' ? 'FATTPA' : 'FPR'"
+            label="Standard"
+          ></v-select>
           <v-layout row wrap>
             <v-flex xs12 sm4 md4>
               <v-text-field v-model="progresivo" label="Progressivo" disabled></v-text-field>
@@ -63,12 +63,13 @@
 export default {
   name: "DatiDocumento",
   props: {
-    isMobile: Boolean
+    isMobile: Boolean,
+    tipoCliente: Object
   },
   data() {
     return {
       menu: false,
-      tipoCliente: { selected: "PA", options: ["PA", "Privato"] },
+      // tipoCliente: { selected: "PA", options: ["PA", "Privato"] },
       progresivo: 4,
       tipoDocumento: {
         selected: "Fattura",

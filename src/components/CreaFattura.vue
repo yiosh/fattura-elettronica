@@ -15,12 +15,20 @@
             <v-expansion-panel class="mt-2" :value="0" popout>
               <v-expansion-panel-content>
                 <div slot="header">Dati Documento</div>
-                <DatiDocumento></DatiDocumento>
+                <DatiDocumento :tipoCliente="tipoCliente"></DatiDocumento>
               </v-expansion-panel-content>
 
               <v-expansion-panel-content>
                 <div slot="header">Dati Cliente</div>
-                <DatiCliente :isMobile="isMobile"></DatiCliente>
+                <keep-alive>
+                  <DatiClientePA v-if="tipoCliente.selected === 'PA'" :isMobile="isMobile"></DatiClientePA>
+                </keep-alive>
+                <keep-alive>
+                  <DatiClientePrivato
+                    v-if="tipoCliente.selected === 'Privato'"
+                    :isMobile="isMobile"
+                  ></DatiClientePrivato>
+                </keep-alive>
               </v-expansion-panel-content>
 
               <v-expansion-panel-content>
@@ -57,7 +65,7 @@
                   </div>
                 </v-card-title>
                 <v-card-text>
-                  <DatiDocumento></DatiDocumento>
+                  <DatiDocumento :tipoCliente="tipoCliente"></DatiDocumento>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -67,7 +75,15 @@
                   <div class="headline">Dati Cliente</div>
                 </v-card-title>
                 <v-card-text>
-                  <DatiCliente :isMobile="isMobile"></DatiCliente>
+                  <keep-alive>
+                    <DatiClientePA v-if="tipoCliente.selected === 'PA'" :isMobile="isMobile"></DatiClientePA>
+                  </keep-alive>
+                  <keep-alive>
+                    <DatiClientePrivato
+                      v-if="tipoCliente.selected === 'Privato'"
+                      :isMobile="isMobile"
+                    ></DatiClientePrivato>
+                  </keep-alive>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -127,7 +143,8 @@
 
 <script>
 import DatiDocumento from "./DatiDocumento";
-import DatiCliente from "./DatiCliente";
+import DatiClientePA from "./DatiClientePA";
+import DatiClientePrivato from "./DatiClientePrivato";
 import ProdottiServizi from "./ProdottiServizi";
 import DatiPagamento from "./DatiPagamento";
 import CalcoloFattura from "./CalcoloFattura";
@@ -138,7 +155,8 @@ export default {
   },
   components: {
     DatiDocumento,
-    DatiCliente,
+    DatiClientePA,
+    DatiClientePrivato,
     ProdottiServizi,
     DatiPagamento,
     CalcoloFattura
@@ -146,6 +164,7 @@ export default {
   data: () => ({
     valid: false,
     name: "",
+    tipoCliente: { selected: "PA", options: ["PA", "Privato"] },
     nameRules: [
       v => !!v || "Name is required",
       v => v.length <= 10 || "Name must be less than 10 characters"
