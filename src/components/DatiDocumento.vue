@@ -47,10 +47,32 @@
           ></v-select>
           <v-layout row wrap>
             <v-flex xs12 sm4 md4>
-              <v-text-field v-model="progresivo" label="Progressivo" disabled></v-text-field>
+              <v-text-field v-model="progresivo" label="Progressivo" :disabled="progresivoActive"></v-text-field>
             </v-flex>
             <v-flex xs12 sm8 md6>
-              <v-btn @click="dialog = false">Modifica Progressivo</v-btn>
+              <v-dialog v-model="dialog" width="500">
+                <v-btn slot="activator">Modifica Progressivo</v-btn>
+
+                <v-card>
+                  <v-card-title
+                    class="headline grey lighten-2"
+                    primary-title
+                  >Numerazione Progressiva Fattura</v-card-title>
+
+                  <v-card-text>
+                    Stai disabilitando la numerazione progressiva automatica.
+                    Ti ricordiamo che il numero del documento deve essere univoco, progressivo e deve seguire l'ordine cronologico senza interruzioni per periodo di imposta.
+                  </v-card-text>
+
+                  <v-divider></v-divider>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="dialog = false">Annulla</v-btn>
+                    <v-btn color="primary" flat @click="activateProgressivo">Ok, gestici numerazione</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -60,6 +82,8 @@
 </template>
 
 <script>
+import { store } from "../store.js";
+
 export default {
   name: "DatiDocumento",
   props: {
@@ -69,7 +93,8 @@ export default {
   data() {
     return {
       menu: false,
-      // tipoCliente: { selected: "PA", options: ["PA", "Privato"] },
+      dialog: false,
+      progresivoActive: true,
       progresivo: 4,
       tipoDocumento: {
         selected: "Fattura",
@@ -95,6 +120,12 @@ export default {
         v => /.+@.+/.test(v) || "E-mail must be valid"
       ]
     };
+  },
+  methods: {
+    activateProgressivo() {
+      this.progresivoActive = false;
+      this.dialog = false;
+    }
   }
 };
 </script>

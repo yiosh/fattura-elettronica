@@ -78,19 +78,14 @@
                             <CalendarMenu :date="props.item.dataScadenza"></CalendarMenu>
                           </td>
                           <td class="text-xs-right">
-                            <v-text-field
-                              type="number"
-                              step="0.01"
-                              v-model="props.item.importo"
-                              prefix="€"
-                            ></v-text-field>
+                            <v-text-field type="number" step="0.01" v-model="importo" prefix="€"></v-text-field>
                           </td>
                         </template>
 
                         <template slot="footer">
                           <td :colspan="headers.length">
                             <v-layout align-center justify-end row>
-                              <strong>Totale: {{ (ripartizioneRate[0].importo).toFixed(2) }}€</strong>
+                              <strong>Totale: {{ importo }}€</strong>
                             </v-layout>
                           </td>
                         </template>
@@ -106,7 +101,63 @@
             <v-stepper-step editable :complete="e6 > 2" step="2">Altri Dati</v-stepper-step>
 
             <v-stepper-content step="2">
-              <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+              <v-card flat>
+                <v-card-text>
+                  <v-container grid-list-md>
+                    <v-layout row wrap>
+                      <v-flex xs12 sm6 md6>
+                        <v-text-field
+                          v-model="altriDati.scontoPagamentoAnticipato"
+                          label="Sconto Pagamento Anticipato"
+                        ></v-text-field>
+                        <v-text-field v-model="altriDati.penalitaRitardi" label="Penalità Ritardi"></v-text-field>
+                        <v-text-field v-model="altriDati.codicePagamento" label="Codice Pagamento"></v-text-field>
+                      </v-flex>
+                      <v-spacer></v-spacer>
+                      <v-flex xs12 sm6 md6>
+                        <v-menu
+                          :close-on-content-click="false"
+                          v-model="menu"
+                          :nudge-right="40"
+                          lazy
+                          transition="scale-transition"
+                          offset-y
+                          full-width
+                          min-width="290px"
+                        >
+                          <v-text-field
+                            slot="activator"
+                            v-model="date"
+                            label="Sconto Pagamento Anticipato"
+                            append-icon="event"
+                            readonly
+                          ></v-text-field>
+                          <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
+                        </v-menu>
+                        <v-menu
+                          :close-on-content-click="false"
+                          v-model="menu2"
+                          :nudge-right="40"
+                          lazy
+                          transition="scale-transition"
+                          offset-y
+                          full-width
+                          min-width="290px"
+                        >
+                          <v-text-field
+                            slot="activator"
+                            v-model="date2"
+                            label="Decorrenza Penale"
+                            append-icon="event"
+                            readonly
+                          ></v-text-field>
+                          <v-date-picker v-model="date2" @input="menu2 = false"></v-date-picker>
+                        </v-menu>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-text>
+              </v-card>
               <v-btn color="primary" @click="e6 = 3">Prosegui</v-btn>
               <v-btn flat>Anulla</v-btn>
             </v-stepper-content>
@@ -119,6 +170,9 @@
 
 <script>
 import CalendarMenu from "./CalendarMenu";
+import { EventBus } from "../event-bus.js";
+import { store } from "../store.js";
+
 export default {
   components: {
     CalendarMenu
@@ -128,9 +182,20 @@ export default {
   },
   data: () => ({
     e6: 1,
+    importo: store.state.prodottiServizi.nettoPagare.toFixed(2),
+    menu: false,
+    date: "",
+    menu2: false,
+    date2: "",
+    altriDati: {
+      scontoPagamentoAnticipato: "",
+      penatilaRitardi: "",
+      codicePagamento: "",
+      scontoPagamentoAnticipatoData: "",
+      decorrenzaPenale: ""
+    },
     valid: false,
     modal: false,
-    menu: false,
     snackColor: "",
     snackText: "",
     max25chars: v => v.length <= 25 || "Input too long!",
@@ -177,6 +242,9 @@ export default {
 
   created() {
     this.initialize();
+    EventBus.$on("prodotti-updated", number => {
+      this.importo = number;
+    });
   },
 
   methods: {
@@ -191,7 +259,7 @@ export default {
           condizioniDiPagamento: "",
           metodoDiPagamento: "",
           dataScadenza: new Date().toISOString().substr(0, 10),
-          importo: 400.5
+          importo: store.state.nettoPagare
         }
       ];
     },

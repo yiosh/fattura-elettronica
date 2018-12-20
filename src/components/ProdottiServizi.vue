@@ -4,7 +4,7 @@
       <v-card v-if="selected.length > 0">
         <v-card-title>
           <v-spacer></v-spacer>
-          <v-btn color="primary" dark>
+          <v-btn color="primary" dark @click="dialog = true">
             <v-icon>add_shopping_cart</v-icon>
             <span style="margin-left: .5em;">Aggiungi Prodotto o Servizio</span>
           </v-btn>
@@ -175,7 +175,7 @@
                       class="text-xs-center"
                     >Hai selezionato {{ selected.length }} prodotti o servizi da inserire in fattura, proseguire con la creazione?</v-flex>
                     <v-flex xs12 class="text-xs-center">
-                      <v-btn dark color="success" @click="dialog = false">Prosegui</v-btn>
+                      <v-btn dark color="success" @click="prosegui">Prosegui</v-btn>
                     </v-flex>
                   </v-layout>
                 </v-flex>
@@ -189,13 +189,16 @@
 </template>
 
 <script>
+import { EventBus } from "../event-bus.js";
+import { store } from "../store.js";
+
 export default {
   props: {
     isMobile: Boolean
   },
   data: () => ({
     search: "",
-    selected: [],
+    selected: store.state.prodottiServizi.selected,
     dialog: false,
     editDialog: false,
     codiceIVA: [
@@ -280,6 +283,9 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    selected(arr) {
+      store.prodottiServiziChangedAction(arr);
     }
   },
 
@@ -329,6 +335,16 @@ export default {
       ];
     },
 
+    prosegui() {
+      store.calculateTotal();
+      this.dialog = false;
+      EventBus.$emit(
+        "prodotti-updated",
+        store.state.prodottiServizi.nettoPagare
+      );
+      console.log(store);
+    },
+
     editItem(item) {
       this.editedIndex = this.products.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -338,7 +354,7 @@ export default {
     deleteItem(item) {
       const index = this.products.indexOf(item);
       confirm("Sei sicuro di voler eliminare questo prodotto?") &&
-        this.desserts.splice(index, 1);
+        store.prodottiServiziRemoveAction(index);
     },
 
     close() {

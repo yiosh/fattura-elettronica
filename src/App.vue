@@ -1,6 +1,26 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" enable-resize-watcher fixed app dark>
+    <v-navigation-drawer fixed v-model="drawerRight" right clipped app dark>
+      <v-list dense>
+        <v-list-tile v-for="item in items" :key="item.title" @click="console.log('clicked')">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-toolbar clipped-right fixed app flat>
+      <v-toolbar-side-icon @click.stop="toggleDrawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Fatturazione Elettronica Aryma</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-side-icon @click.stop="drawerRight = !drawerRight"></v-toolbar-side-icon>
+    </v-toolbar>
+
+    <v-navigation-drawer v-model="drawer" fixed app dark>
       <v-toolbar flat class="transparent">
         <v-list dense>
           <v-list-tile avatar>
@@ -18,7 +38,7 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-list-tile v-for="item in items" :key="item.title" @click="console.log('clicked')">
+        <v-list-tile v-for="item in menu" :key="item.title" @click="console.log('clicked')">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -29,12 +49,6 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-
-    <v-toolbar fixed app flat>
-      <v-toolbar-side-icon @click.stop="toggleDrawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Fatturazione Elettronica Aryma</v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
 
     <v-content>
       <CreaFattura :isMobile="isMobile"/>
@@ -56,8 +70,43 @@ export default {
     return {
       isMobile: null,
       drawer: false,
+      drawerRight: false,
       clipped: false,
-      items: [{ title: "Crea fattura", icon: "dashboard" }]
+      menu: [
+        { title: "Vendita", icon: "euro_symbol" },
+        { title: "Approvvigionamento", icon: "shopping_cart" },
+        { title: "Amministrazione", icon: "assignment" },
+        { title: "Logistica", icon: "assessment" },
+        { title: "Risorse Umane", icon: "supervised_user_circle" },
+        { title: "Impostazioni", icon: "settings" }
+      ],
+      items: [
+        {
+          title: "Crea fattura",
+          icon: "add_circle_outline",
+          options: [{ title: "Modalità Smart" }, { title: "Modalità Guidata" }]
+        },
+        {
+          title: "Carica Fattura",
+          icon: "cloud_upload"
+        },
+        {
+          title: "Home",
+          icon: "home"
+        },
+        {
+          title: "Bozze",
+          icon: "inbox"
+        },
+        {
+          title: "Fatture Inviate",
+          icon: "call_made"
+        },
+        {
+          title: "Fatture Ricevute",
+          icon: "call_received"
+        }
+      ]
     };
   },
   methods: {
