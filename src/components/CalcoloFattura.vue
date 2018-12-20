@@ -6,7 +6,9 @@
         <v-card-text>
           <v-layout row wrap justify-center>
             <v-flex xs12 md1>
-              <v-icon color="warning" x-large>info</v-icon>
+              <v-layout justify-center align-center row fill-height>
+                <v-icon color="warning" x-large>info</v-icon>
+              </v-layout>
             </v-flex>
             <v-flex xs12 md11>Disabilitando quest'opzione, puoi impostare manualmente i calcoli.
               <br>

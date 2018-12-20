@@ -60,8 +60,19 @@
                   >Numerazione Progressiva Fattura</v-card-title>
 
                   <v-card-text>
-                    Stai disabilitando la numerazione progressiva automatica.
-                    Ti ricordiamo che il numero del documento deve essere univoco, progressivo e deve seguire l'ordine cronologico senza interruzioni per periodo di imposta.
+                    <v-layout row wrap justify-center>
+                      <v-flex xs12 md2>
+                        <v-layout justify-center align-center row fill-height>
+                          <v-icon color="warning" x-large>info</v-icon>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex xs12 md10>
+                        Stai disabilitando la numerazione progressiva automatica.
+                        Ti ricordiamo che il numero del documento deve essere univoco, progressivo e deve seguire l'ordine cronologico senza interruzioni per periodo di imposta.
+                      </v-flex>
+                    </v-layout>
+                    <!-- Stai disabilitando la numerazione progressiva automatica.
+                    Ti ricordiamo che il numero del documento deve essere univoco, progressivo e deve seguire l'ordine cronologico senza interruzioni per periodo di imposta.-->
                   </v-card-text>
 
                   <v-divider></v-divider>

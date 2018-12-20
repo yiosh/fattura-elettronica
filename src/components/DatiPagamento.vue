@@ -1,7 +1,38 @@
 <template>
   <v-container fluid :class="{'pa-5':isMobile}">
     <v-layout align-center justify-center row>
-      <v-dialog v-model="dialog" width="80%" :fullscreen="isMobile">
+      <v-dialog v-if="importo == '0.00'" v-model="dialog2" width="500">
+        <v-btn slot="activator" color="success" dark>Inserire Dati pagamento</v-btn>
+
+        <v-card>
+          <v-card-title
+            class="headline grey lighten-2"
+            primary-title
+          >Impostazione Metodo di Pagamento</v-card-title>
+
+          <v-card-text>
+            <v-layout row wrap justify-center>
+              <v-flex xs12 md2>
+                <v-layout justify-center align-center row fill-height>
+                  <v-icon color="warning" x-large>info</v-icon>
+                </v-layout>
+              </v-flex>
+              <v-flex
+                xs12
+                md10
+              >È necessario inserire almeno un prodotto o servizio prima di impostare il metodo di pagamento.</v-flex>
+            </v-layout>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click="dialog2 = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-if="importo > 0" v-model="dialog" width="80%" :fullscreen="isMobile">
         <v-btn slot="activator" color="success" dark>Inserire Dati pagamento</v-btn>
 
         <v-card>
@@ -202,6 +233,7 @@ export default {
     pagination: {},
     search: "",
     dialog: false,
+    dialog2: false,
     editDialog: false,
     selectedClient: null,
     ripartizioneRate: null,
