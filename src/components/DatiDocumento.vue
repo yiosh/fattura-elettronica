@@ -71,8 +71,6 @@
                         Ti ricordiamo che il numero del documento deve essere univoco, progressivo e deve seguire l'ordine cronologico senza interruzioni per periodo di imposta.
                       </v-flex>
                     </v-layout>
-                    <!-- Stai disabilitando la numerazione progressiva automatica.
-                    Ti ricordiamo che il numero del documento deve essere univoco, progressivo e deve seguire l'ordine cronologico senza interruzioni per periodo di imposta.-->
                   </v-card-text>
 
                   <v-divider></v-divider>
@@ -84,6 +82,49 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+            </v-flex>
+          </v-layout>
+          <v-layout>
+            <v-flex xs12 sm6 md5>
+              <v-dialog v-model="dialogEsigibilita" width="50%">
+                <v-btn slot="activator" color="primary" dark>Esigibilità IVA</v-btn>
+
+                <v-card>
+                  <v-card-title class="headline grey lighten-2" primary-title>Esigibilità'IVA</v-card-title>
+
+                  <v-card-text>Attraverso questa sezione puoi indicare il regime di esigibilità dell'IVA (differita o immediata) o la modalità di versamento dell'imposta (scissione dei pagamenti).
+                    <v-layout row wrap>
+                      <v-spacer></v-spacer>
+                      <v-flex>
+                        <v-layout justify-center align-center row fill-height>
+                          <v-switch style="margin-bottom: 0;" label="Attivo" v-model="attivo"></v-switch>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex>
+                        <v-layout justify-center align-center row fill-height>
+                          <v-select
+                            v-if="attivo"
+                            :items="['IVA ad esegibilità immediata', 'IVA ad esegibilità differita', 'Scissione dei pagamenti']"
+                            value="IVA ad esegibilità immediata"
+                          ></v-select>
+                        </v-layout>
+                      </v-flex>
+                      <v-spacer></v-spacer>
+                    </v-layout>
+                  </v-card-text>
+
+                  <v-divider></v-divider>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="dialogEsigibilita = false">Anulla</v-btn>
+                    <v-btn color="primary" flat @click="dialogEsigibilita = false">Salva</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-flex>
+            <v-flex xs12 sm6 md7>
+              <v-switch style="margin-bottom: 0;" label="Attivo" v-model="attivo"></v-switch>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -103,8 +144,10 @@ export default {
   },
   data() {
     return {
+      attivo: true,
       menu: false,
       dialog: false,
+      dialogEsigibilita: false,
       progresivoActive: true,
       progresivo: 4,
       tipoDocumento: {
